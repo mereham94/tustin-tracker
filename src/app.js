@@ -75,6 +75,15 @@ function App() {
     return out;
   }, [filtered]);
 
+  const staleItems = useMemo(() => {
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - 7);
+    return list.filter((i) =>
+      (i.status === "in-progress" || i.status === "planned") &&
+      new Date(i.date + "T00:00:00") < cutoff
+    );
+  }, [list]);
+
   const styleVars = { "--accent": accent, "--accent-soft": accent + "1A" };
 
   return (
@@ -139,6 +148,10 @@ function App() {
             </div>
           </div>
         </header>
+
+        {!client && staleItems.length > 0 && (
+          <StaleBanner items={staleItems} onOpen={setSelected} />
+        )}
 
         <div className="dash-cards">
           {window.STATUSES.map((s) => (
@@ -340,6 +353,36 @@ function SegControl({ options, value, onChange }) {
           style={{ padding: "5px 10px", fontSize: 12 }}
           onClick={() => onChange(o)}>{o}</button>
       ))}
+    </div>
+  );
+}
+
+function StaleBanner({ items, onOpen }) {
+  const [dismissed, setDismissed] = useS(false);
+  if (dismissed) return null;
+  return (
+    <div className="stale-banner">
+      <div className="stale-left">
+        <span className="stale-icon">⏰</span>
+        <div>
+          <div className="stale-title">
+            {items.length === 1 ? "1 item needs attention" : `${items.length} items need attention`}
+            <span className="stale-sub"> — in progress or planned for over a week</span>
+          </div>
+          <div className="stale-list">
+            {items.map((i) => (
+              <button key={i.id} className="stale-item" onClick={() => onOpen(i)}>
+                <StatusPill status={i.status} dot />
+                <span>{i.title}</span>
+                <span className="stale-age">· {relTime(i.date)}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+      <button className="icon-btn stale-close" onClick={() => setDismissed(true)} aria-label="Dismiss">
+        <Icon name="close" size={15} />
+      </button>
     </div>
   );
 }

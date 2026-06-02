@@ -80,6 +80,23 @@ button{font-family:inherit;cursor:pointer}
 .btn.ghost:hover{background:var(--line-soft);color:var(--ink)}
 .add-btn{flex:none;white-space:nowrap}
 
+/* ---------- stale banner ---------- */
+.stale-banner{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
+  margin:20px 36px 0;padding:14px 16px;
+  background:#fffbea;border:1px solid #f5c800;border-radius:var(--r);
+}
+.stale-left{display:flex;align-items:flex-start;gap:10px}
+.stale-icon{font-size:20px;line-height:1;margin-top:1px}
+.stale-title{font-size:13.5px;font-weight:700;color:var(--ink)}
+.stale-sub{font-weight:400;color:var(--muted)}
+.stale-list{display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.stale-item{display:inline-flex;align-items:center;gap:7px;background:none;border:none;
+  font-family:inherit;font-size:13px;color:var(--ink);padding:0;cursor:pointer;text-align:left}
+.stale-item:hover span:not(.dot){text-decoration:underline}
+.stale-age{color:var(--faint);font-size:12px}
+.stale-close{margin-top:2px}
+
 /* ---------- dashboard cards ---------- */
 .dash-cards{display:flex;gap:12px;padding:20px 36px 0;flex-wrap:wrap}
 .dash-card{
