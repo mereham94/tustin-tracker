@@ -172,7 +172,7 @@ function DetailDrawer({ item, onClose, client }) {
                     <Avatar name={item.requester.name} initials={item.requester.initials} size={36} />
                     <div>
                       <div className="dp-name">{item.requester.name}</div>
-                      <div className="dp-role">{item.requester.role}</div>
+                      {item.requester.role && <div className="dp-role">{item.requester.role}</div>}
                     </div>
                   </div>
                 </div>

@@ -42,7 +42,7 @@ window.IMPROVEMENTS = [
     report: ["School Checkpoints Report", "Teacher Checkpoints Report"],
     status: "shipped",
     date: "2026-05-28",
-    requester: { name: "Judy Park", role: "Director of Curriculum & Assessment", initials: "JP" },
+    requester: { name: "Judy Park", role: "", initials: "JP" },
     category: "New feature",
     impact: ["Teachers", "Site leaders", "District leaders"],
     what: "Added a second Performance bucket section that breaks results into 10-percentile-point bands (60–70%, 50–60%, 40–50%, …) alongside the original 25% buckets.",
