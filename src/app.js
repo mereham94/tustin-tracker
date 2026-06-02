@@ -134,6 +134,20 @@ function App() {
           </div>
         </header>
 
+        <div className="dash-cards">
+          {window.STATUSES.map((s) => (
+            <button
+              key={s.key}
+              className={"dash-card" + (status === s.key ? " active" : "")}
+              onClick={() => setStatus(status === s.key ? "all" : s.key)}
+            >
+              <span className="dash-emoji">{window.STATUS_EMOJI[s.key]}</span>
+              <span className="dash-count" style={{ color: STATUS_META[s.key].color }}>{statusCounts[s.key]}</span>
+              <span className="dash-label">{s.label}</span>
+            </button>
+          ))}
+        </div>
+
         <div className="toolbar">
           <div className="search">
             <Icon name="search" size={16} style={{ color: "var(--muted)" }} />
