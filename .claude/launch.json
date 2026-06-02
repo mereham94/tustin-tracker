@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "tustin-tracker",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["server.js"],
+      "cwd": "/Users/meredithhamilton/tustin-tracker",
+      "port": 3000
+    }
+  ]
+}
