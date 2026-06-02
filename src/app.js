@@ -4,12 +4,13 @@ function App() {
   const MODE = window.TRACKER_MODE || "internal";
   const clientLocked = MODE === "client";
   const [audience, setAudience] = useS(clientLocked ? "client" : "internal");
-  const [list, addToStore, synced] = useStore();
+  const [list, addToStore, updateInStore, synced] = useStore();
   const [query, setQuery] = useS("");
   const [report, setReport] = useS("all");
   const [status, setStatus] = useS("all");
   const [selected, setSelected] = useS(null);
   const [addOpen, setAddOpen] = useS(false);
+  const [editItem, setEditItem] = useS(null);
   const [layout, setLayout] = useS("timeline");
   const [showRail, setShowRail] = useS(true);
   const [accent, setAccent] = useS("#2F6BD8");
@@ -56,6 +57,11 @@ function App() {
   function addItem(it) {
     addToStore(it);
     setTimeout(() => setSelected(it), 120);
+  }
+
+  function saveEdit(it) {
+    updateInStore(it);
+    setSelected(it);
   }
 
   const groups = useMemo(() => {
@@ -202,8 +208,10 @@ function App() {
         </div>
       </main>
 
-      <DetailDrawer item={selected} onClose={() => setSelected(null)} client={client} />
+      <DetailDrawer item={selected} onClose={() => setSelected(null)} client={client}
+        onEdit={!client ? (it) => { setEditItem(it); setSelected(null); } : null} />
       <AddModal open={addOpen} onClose={() => setAddOpen(false)} onAdd={addItem} />
+      <AddModal open={!!editItem} editItem={editItem} onClose={() => setEditItem(null)} onAdd={saveEdit} />
 
       {tweaksOpen && !clientLocked && (
         <DisplayPanel

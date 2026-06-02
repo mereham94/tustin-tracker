@@ -1,4 +1,4 @@
-function AddModal({ open, onClose, onAdd }) {
+function AddModal({ open, onClose, onAdd, editItem }) {
   const blank = {
     title: "", report: [window.REPORTS[0]], status: "shipped",
     reqName: "", reqRole: "", category: "New feature",
@@ -7,9 +7,28 @@ function AddModal({ open, onClose, onAdd }) {
   const [f, setF] = React.useState(blank);
   const [touched, setTouched] = React.useState(false);
   const set = (k, v) => setF((p) => ({ ...p, [k]: v }));
+  const isEdit = !!editItem;
 
   React.useEffect(() => {
-    if (open) { setF(blank); setTouched(false); }
+    if (open) {
+      if (editItem) {
+        setF({
+          title: editItem.title || "",
+          report: Array.isArray(editItem.report) ? editItem.report : [editItem.report],
+          status: editItem.status || "shipped",
+          reqName: editItem.requester?.name || "",
+          reqRole: editItem.requester?.role || "",
+          category: editItem.category || "New feature",
+          impact: editItem.impact || [],
+          what: editItem.what || "",
+          why: editItem.why || "",
+          detail: editItem.detail || "",
+        });
+      } else {
+        setF(blank);
+      }
+      setTouched(false);
+    }
   }, [open]);
 
   React.useEffect(() => {
@@ -27,7 +46,7 @@ function AddModal({ open, onClose, onAdd }) {
     if (!valid) return;
     const initials = f.reqName.trim().split(/\s+/).map((w) => w[0]).slice(0, 2).join("").toUpperCase();
     onAdd({
-      id: "imp-" + Date.now(),
+      id: isEdit ? editItem.id : "imp-" + Date.now(),
       title: f.title.trim(),
       report: f.report.length ? f.report : [window.REPORTS[0]],
       status: f.status,
@@ -49,8 +68,8 @@ function AddModal({ open, onClose, onAdd }) {
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-head">
           <div>
-            <h2 className="modal-title">Log an improvement</h2>
-            <p className="modal-sub">Tell the team what changed and why it mattered.</p>
+            <h2 className="modal-title">{isEdit ? "Edit improvement" : "Log an improvement"}</h2>
+            <p className="modal-sub">{isEdit ? "Update the details below." : "Tell the team what changed and why it mattered."}</p>
           </div>
           <button className="icon-btn" onClick={onClose} aria-label="Close">
             <Icon name="close" size={18} />
@@ -132,7 +151,7 @@ function AddModal({ open, onClose, onAdd }) {
           {touched && !valid && <span className="form-err">Fill in the required fields to continue.</span>}
           <div className="foot-actions">
             <button className="btn ghost" onClick={onClose}>Cancel</button>
-            <button className={"btn primary" + (valid ? "" : " dim")} onClick={submit}>Add to tracker</button>
+            <button className={"btn primary" + (valid ? "" : " dim")} onClick={submit}>{isEdit ? "Save changes" : "Add to tracker"}</button>
           </div>
         </div>
       </div>

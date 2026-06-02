@@ -31,20 +31,32 @@ function useStore() {
     return () => { clearInterval(id); document.removeEventListener("visibilitychange", onVis); };
   }, []);
 
+  function save(next) {
+    lastJson.current = JSON.stringify(next);
+    fetch("/api/state", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(next),
+    }).catch(() => {});
+  }
+
   function add(it) {
     setList((prev) => {
       const next = [it, ...prev];
-      lastJson.current = JSON.stringify(next);
-      fetch("/api/state", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(next),
-      }).catch(() => {});
+      save(next);
       return next;
     });
   }
 
-  return [list, add, synced];
+  function update(it) {
+    setList((prev) => {
+      const next = prev.map((x) => x.id === it.id ? it : x);
+      save(next);
+      return next;
+    });
+  }
+
+  return [list, add, update, synced];
 }
 
 Object.assign(window, { useStore });

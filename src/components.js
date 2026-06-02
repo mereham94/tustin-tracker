@@ -141,7 +141,7 @@ function TimelineItem({ item, onOpen, active }) {
 }
 
 /* ---------- detail drawer ---------- */
-function DetailDrawer({ item, onClose, client }) {
+function DetailDrawer({ item, onClose, client, onEdit }) {
   useEffect(() => {
     function esc(e) { if (e.key === "Escape") onClose(); }
     window.addEventListener("keydown", esc);
@@ -155,9 +155,17 @@ function DetailDrawer({ item, onClose, client }) {
           <>
             <div className="drawer-head">
               <ReportTags report={item.report} />
-              <button className="icon-btn" onClick={onClose} aria-label="Close">
-                <Icon name="close" size={18} />
-              </button>
+              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                {onEdit && (
+                  <button className="btn ghost" style={{ padding: "6px 12px", fontSize: 13 }}
+                    onClick={() => onEdit(item)}>
+                    Edit
+                  </button>
+                )}
+                <button className="icon-btn" onClick={onClose} aria-label="Close">
+                  <Icon name="close" size={18} />
+                </button>
+              </div>
             </div>
             <div className="drawer-body">
               <div className="drawer-status">
