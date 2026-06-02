@@ -14,6 +14,27 @@ window.STATUSES = [
   { key: "planned", label: "Planned" },
 ];
 
+window.STATUS_EMOJI = {
+  shipped: "✅",
+  "in-progress": "🛠️",
+  planned: "🗓️",
+};
+window.CATEGORY_EMOJI = {
+  "New feature": "✨",
+  "UX": "🎨",
+  "Bug fix": "🐛",
+  "Performance": "⚡",
+};
+window.IMPACT_EMOJI = {
+  "Teachers": "🍎",
+  "Site leaders": "🏫",
+  "District leaders": "🏛️",
+};
+window.REPORT_EMOJI = {
+  "School Checkpoints Report": "🏫",
+  "Teacher Checkpoints Report": "🧑‍🏫",
+};
+
 window.IMPROVEMENTS = [
   {
     id: "imp-014",
@@ -23,7 +44,7 @@ window.IMPROVEMENTS = [
     date: "2026-05-28",
     requester: { name: "Judy Park", role: "Director of Curriculum & Assessment", initials: "JP" },
     category: "New feature",
-    impact: ["Teachers", "EL Coordinators", "Site Admins"],
+    impact: ["Teachers", "Site leaders", "District leaders"],
     what: "Added a second Performance bucket section that breaks results into 10-percentile-point bands (60–70%, 50–60%, 40–50%, …) alongside the original 25% buckets.",
     why: "The 25% buckets were too coarse to act on. Finer bands let coordinators more accurately place EL students into the right support tier and surface instructional gaps that were previously hidden inside a single large bucket.",
     detail: "Both bucket tables now share a sortable header and respect the active Checkpoint, Teacher, and Class filters. The 10% breakdown sits directly beneath the 25% table so educators can move from a broad read to a precise one without leaving the page. The same change was applied to both the School and Teacher Checkpoints reports so they stay consistent.",

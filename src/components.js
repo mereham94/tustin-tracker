@@ -61,7 +61,7 @@ function StatusPill({ status, dot }) {
   if (dot) return <span className="dot" style={{ background: m.color }} title={m.label} />;
   return (
     <span className="status-pill" style={{ color: m.color, background: m.bg }}>
-      <Icon name={m.icon} size={12} />
+      <span className="pill-emoji">{window.STATUS_EMOJI[status]}</span>
       {m.label}
     </span>
   );
@@ -72,7 +72,7 @@ function ReportTag({ report, small }) {
   return (
     <span className={"report-tag" + (small ? " small" : "")} title={report}>
       <span className="report-code">{code}</span>
-      {!small && <span className="report-name">{report}</span>}
+      {!small && <span className="report-name">{window.REPORT_EMOJI[report]} {report}</span>}
     </span>
   );
 }
@@ -102,7 +102,11 @@ function Avatar({ name, initials, size = 30 }) {
 function ImpactChips({ items }) {
   return (
     <div className="impact-row">
-      {items.map((t) => <span key={t} className="impact-chip">{t}</span>)}
+      {items.map((t) => (
+        <span key={t} className="impact-chip">
+          <span className="chip-emoji">{window.IMPACT_EMOJI[t] || "👥"}</span>{t}
+        </span>
+      ))}
     </div>
   );
 }
@@ -158,7 +162,7 @@ function DetailDrawer({ item, onClose, client }) {
             <div className="drawer-body">
               <div className="drawer-status">
                 <StatusPill status={item.status} />
-                {!client && <span className="drawer-cat">{item.category}</span>}
+                {!client && <span className="drawer-cat">{window.CATEGORY_EMOJI[item.category]} {item.category}</span>}
               </div>
               <h2 className="drawer-title">{item.title}</h2>
               <div className="drawer-people">

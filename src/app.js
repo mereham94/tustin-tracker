@@ -102,11 +102,11 @@ function App() {
           <div className="head-crumb">
             <span>Session Analytics</span>
             <Icon name="chevron" size={13} />
-            <span className="crumb-cur">Report Improvements</span>
+            <span className="crumb-cur">Report Changes & Improvements</span>
           </div>
           <div className="head-row">
             <div>
-              <h1 className="head-title">Report Improvements</h1>
+              <h1 className="head-title">Report Changes & Improvements</h1>
               <p className="head-sub">
                 {client
                   ? "Improvements we’ve made to your reports — shaped by your feedback."

@@ -77,7 +77,7 @@ function AddModal({ open, onClose, onAdd }) {
             </Field>
             <Field label="Category">
               <select className="inp" value={f.category} onChange={(e) => set("category", e.target.value)}>
-                {CATEGORIES.map((c) => <option key={c}>{c}</option>)}
+                {CATEGORIES.map((c) => <option key={c} value={c}>{(window.CATEGORY_EMOJI[c] || "") + " " + c}</option>)}
               </select>
             </Field>
           </div>
@@ -108,7 +108,8 @@ function AddModal({ open, onClose, onAdd }) {
                 return (
                   <button key={o} className={"pick" + (on ? " on" : "")}
                     onClick={() => set("impact", on ? f.impact.filter((x) => x !== o) : [...f.impact, o])}>
-                    {on && <Icon name="check" size={12} />}{o}
+                    {on && <Icon name="check" size={12} />}
+                    <span className="chip-emoji">{window.IMPACT_EMOJI[o]}</span>{o}
                   </button>
                 );
               })}
