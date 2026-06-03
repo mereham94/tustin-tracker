@@ -134,7 +134,7 @@ function AddModal({ open, onClose, onAdd, editItem }) {
               })}
             </div>
           </Field>
-          <Field label="What changed?" required invalid={touched && !f.what.trim()}>
+          <Field label="Describe the change." required invalid={touched && !f.what.trim()}>
             <textarea className="inp ta" rows={2} value={f.what} placeholder="A plain-language description of the change."
               onChange={(e) => set("what", e.target.value)} />
           </Field>
