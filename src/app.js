@@ -4,7 +4,7 @@ function App() {
   const MODE = window.TRACKER_MODE || "internal";
   const clientLocked = MODE === "client";
   const [audience, setAudience] = useS(clientLocked ? "client" : "internal");
-  const [list, addToStore, updateInStore, synced] = useStore();
+  const [list, addToStore, updateInStore, removeFromStore, synced] = useStore();
   const [query, setQuery] = useS("");
   const [report, setReport] = useS("all");
   const [status, setStatus] = useS("all");
@@ -248,6 +248,7 @@ function App() {
 
       <DetailDrawer item={selected} onClose={() => setSelected(null)} client={client}
         onEdit={!client ? (it) => { setEditItem(it); setSelected(null); } : null}
+        onDelete={!client ? (id) => { removeFromStore(id); setSelected(null); } : null}
         onReact={handleReact} onComment={handleComment} />
       <AddModal open={addOpen} onClose={() => setAddOpen(false)} onAdd={addItem} />
       <AddModal open={!!editItem} editItem={editItem} onClose={() => setEditItem(null)} onAdd={saveEdit} />

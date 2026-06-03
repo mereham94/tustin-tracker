@@ -56,7 +56,15 @@ function useStore() {
     });
   }
 
-  return [list, add, update, synced];
+  function remove(id) {
+    setList((prev) => {
+      const next = prev.filter((x) => x.id !== id);
+      save(next);
+      return next;
+    });
+  }
+
+  return [list, add, update, remove, synced];
 }
 
 Object.assign(window, { useStore });

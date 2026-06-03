@@ -276,7 +276,8 @@ function CommentForm({ item, onComment }) {
   );
 }
 
-function DetailDrawer({ item, onClose, client, onEdit, onReact, onComment }) {
+function DetailDrawer({ item, onClose, client, onEdit, onDelete, onReact, onComment }) {
+  const [confirmDelete, setConfirmDelete] = useState(false);
   useEffect(() => {
     function esc(e) { if (e.key === "Escape") onClose(); }
     window.addEventListener("keydown", esc);
@@ -296,6 +297,25 @@ function DetailDrawer({ item, onClose, client, onEdit, onReact, onComment }) {
                     onClick={() => onEdit(item)}>
                     Edit
                   </button>
+                )}
+                {onDelete && !confirmDelete && (
+                  <button className="btn ghost delete-btn" style={{ padding: "6px 12px", fontSize: 13 }}
+                    onClick={() => setConfirmDelete(true)}>
+                    Delete
+                  </button>
+                )}
+                {onDelete && confirmDelete && (
+                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <span style={{ fontSize: 12, color: "var(--muted)" }}>Sure?</span>
+                    <button className="btn ghost delete-btn" style={{ padding: "6px 12px", fontSize: 13 }}
+                      onClick={() => onDelete(item.id)}>
+                      Yes, delete
+                    </button>
+                    <button className="btn ghost" style={{ padding: "6px 12px", fontSize: 13 }}
+                      onClick={() => setConfirmDelete(false)}>
+                      Cancel
+                    </button>
+                  </div>
                 )}
                 <button className="icon-btn" onClick={onClose} aria-label="Close">
                   <Icon name="close" size={18} />

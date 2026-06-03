@@ -227,6 +227,8 @@ button{font-family:inherit;cursor:pointer}
 .drawer{position:absolute;top:0;right:0;height:100%;width:min(480px,92vw);background:var(--card);box-shadow:var(--shadow-lg);transform:translateX(100%);transition:transform .26s cubic-bezier(.22,.61,.36,1);display:flex;flex-direction:column}
 .drawer-scrim.open .drawer{transform:translateX(0)}
 .drawer-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--line)}
+.delete-btn{color:#d24a3f !important;border-color:#f5c6c2 !important}
+.delete-btn:hover{background:#fdf2f2 !important}
 .icon-btn{border:0;background:none;color:var(--muted);display:flex;padding:7px;border-radius:8px;transition:background .12s,color .12s}
 .icon-btn:hover{background:var(--line-soft);color:var(--ink)}
 .drawer-body{padding:24px 24px 40px;overflow-y:auto}
