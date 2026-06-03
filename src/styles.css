@@ -165,6 +165,11 @@ button{font-family:inherit;cursor:pointer}
 .tl-reactions{padding:10px 18px 12px;border-top:1px solid var(--line-soft);display:flex;align-items:center;gap:10px;background:#fafbfd}
 .comment-count-btn{border:none;background:none;font-size:13px;color:var(--muted);cursor:pointer;font-family:inherit;font-weight:600;margin-left:auto}
 .comment-count-btn:hover{color:var(--accent)}
+.tl-internal-footer{border-top:1px solid var(--line-soft);padding:14px 18px;background:#fafbfd;display:flex;flex-direction:column;gap:14px}
+.tl-internal-comments{}
+.tl-footer-label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);margin-bottom:8px}
+.tl-notes-area{}
+.tl-notes-input{font-size:13px;resize:vertical;background:#fff}
 .tl-comment-area{border-top:1px solid var(--line-soft);padding:14px 18px;background:#fafbfd}
 .tl-comment-list{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
 .tl-comment{display:flex;gap:10px;align-items:flex-start}

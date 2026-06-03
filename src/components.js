@@ -134,13 +134,20 @@ function ReactionBar({ item, onReact, compact }) {
   );
 }
 
-function TimelineItem({ item, onOpen, active, onReact, onComment }) {
+function TimelineItem({ item, onOpen, active, onReact, onComment, onUpdate, client }) {
   const [commentOpen, setCommentOpen] = useState(false);
+  const [notes, setNotes] = useState(item.detail || "");
   const comments = item.comments || [];
 
   function handleComment(it, comment) {
     onComment(it, comment);
     setCommentOpen(false);
+  }
+
+  function saveNotes() {
+    if (notes !== (item.detail || "")) {
+      onUpdate({ ...item, detail: notes });
+    }
   }
 
   return (
@@ -168,30 +175,68 @@ function TimelineItem({ item, onOpen, active, onReact, onComment }) {
           </div>
         </button>
 
-        <div className="tl-reactions">
-          <ReactionBar item={item} onReact={onReact} compact />
-          <button className="comment-count-btn" onClick={(e) => { e.stopPropagation(); setCommentOpen(v => !v); }}>
-            💬 {comments.length > 0 ? comments.length : "Comment"}
-          </button>
-        </div>
-
-        {commentOpen && (
-          <div className="tl-comment-area" onClick={(e) => e.stopPropagation()}>
-            {comments.length > 0 && (
-              <div className="tl-comment-list">
-                {comments.map((c, i) => (
-                  <div key={i} className="tl-comment">
-                    <Avatar name={c.name} initials={c.name.split(" ").map(w => w[0]).slice(0,2).join("").toUpperCase()} size={24} />
-                    <div className="tl-comment-body">
-                      <span className="tl-comment-name">{c.name}</span>
-                      <span className="tl-comment-date">{fmtDate(c.date)}</span>
-                      <p className="tl-comment-text">{c.text}</p>
-                    </div>
+        {/* Client view: reactions + comment box */}
+        {client && (
+          <>
+            <div className="tl-reactions">
+              <ReactionBar item={item} onReact={onReact} compact />
+              <button className="comment-count-btn" onClick={(e) => { e.stopPropagation(); setCommentOpen(v => !v); }}>
+                💬 {comments.length > 0 ? comments.length : "Comment"}
+              </button>
+            </div>
+            {commentOpen && (
+              <div className="tl-comment-area" onClick={(e) => e.stopPropagation()}>
+                {comments.length > 0 && (
+                  <div className="tl-comment-list">
+                    {comments.map((c, i) => (
+                      <div key={i} className="tl-comment">
+                        <Avatar name={c.name} initials={c.name.split(" ").map(w => w[0]).slice(0,2).join("").toUpperCase()} size={24} />
+                        <div className="tl-comment-body">
+                          <span className="tl-comment-name">{c.name}</span>
+                          <span className="tl-comment-date">{fmtDate(c.date)}</span>
+                          <p className="tl-comment-text">{c.text}</p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                )}
+                <CommentForm item={item} onComment={handleComment} />
               </div>
             )}
-            <CommentForm item={item} onComment={handleComment} />
+          </>
+        )}
+
+        {/* Internal view: client comments read-only + internal notes */}
+        {!client && (
+          <div className="tl-internal-footer" onClick={(e) => e.stopPropagation()}>
+            {comments.length > 0 && (
+              <div className="tl-internal-comments">
+                <div className="tl-footer-label">💬 Client comments</div>
+                <div className="tl-comment-list">
+                  {comments.map((c, i) => (
+                    <div key={i} className="tl-comment">
+                      <Avatar name={c.name} initials={c.name.split(" ").map(w => w[0]).slice(0,2).join("").toUpperCase()} size={22} />
+                      <div className="tl-comment-body">
+                        <span className="tl-comment-name">{c.name}</span>
+                        <span className="tl-comment-date">{fmtDate(c.date)}</span>
+                        <p className="tl-comment-text">{c.text}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            <div className="tl-notes-area">
+              <div className="tl-footer-label">📝 Internal notes</div>
+              <textarea
+                className="inp ta tl-notes-input"
+                rows={2}
+                placeholder="Add internal notes for the team…"
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                onBlur={saveNotes}
+              />
+            </div>
           </div>
         )}
       </div>
