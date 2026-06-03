@@ -114,14 +114,17 @@ function ImpactChips({ items }) {
 /* ---------- timeline item ---------- */
 function ReactionBar({ item, onReact, compact }) {
   const reactions = item.reactions || {};
+  const [, forceUpdate] = useState(0);
   return (
     <div className={"reaction-bar" + (compact ? " compact" : "")}>
       {window.REACTIONS.map(({ emoji, label }) => {
         const count = reactions[emoji] || 0;
+        const mine = !!localStorage.getItem(`reaction:${item.id}:${emoji}`);
         return (
-          <button key={emoji} className={"reaction-btn" + (count > 0 ? " has-count" : "")}
-            title={label}
-            onClick={(e) => { e.stopPropagation(); onReact(item, emoji); }}>
+          <button key={emoji}
+            className={"reaction-btn" + (count > 0 ? " has-count" : "") + (mine ? " mine" : "")}
+            title={mine ? `Remove your ${label} reaction` : label}
+            onClick={(e) => { e.stopPropagation(); onReact(item, emoji); forceUpdate(n => n + 1); }}>
             <span className="reaction-emoji">{emoji}</span>
             {count > 0 && <span className="reaction-count">{count}</span>}
           </button>

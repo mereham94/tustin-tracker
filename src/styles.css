@@ -139,6 +139,8 @@ button{font-family:inherit;cursor:pointer}
 .reaction-btn.has-count{background:var(--accent-soft);border-color:var(--accent)}
 .reaction-emoji{font-size:16px;line-height:1}
 .reaction-count{font-size:12px;font-weight:700;color:var(--accent)}
+.reaction-btn.mine{background:var(--accent-soft);border-color:var(--accent)}
+.reaction-btn.mine .reaction-count{color:var(--accent)}
 .reaction-bar.compact .reaction-btn{padding:4px 8px}
 .reaction-bar.compact .reaction-emoji{font-size:14px}
 

@@ -65,8 +65,16 @@ function App() {
   }
 
   function handleReact(item, emoji) {
-    const reactions = { ...( item.reactions || {} ) };
-    reactions[emoji] = (reactions[emoji] || 0) + 1;
+    const key = `reaction:${item.id}:${emoji}`;
+    const already = localStorage.getItem(key);
+    const reactions = { ...(item.reactions || {}) };
+    if (already) {
+      reactions[emoji] = Math.max(0, (reactions[emoji] || 0) - 1);
+      localStorage.removeItem(key);
+    } else {
+      reactions[emoji] = (reactions[emoji] || 0) + 1;
+      localStorage.setItem(key, "1");
+    }
     const updated = { ...item, reactions };
     updateInStore(updated);
     if (selected && selected.id === item.id) setSelected(updated);
