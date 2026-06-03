@@ -112,36 +112,96 @@ function ImpactChips({ items }) {
 }
 
 /* ---------- timeline item ---------- */
-function TimelineItem({ item, onOpen, active }) {
+function ReactionBar({ item, onReact, compact }) {
+  const reactions = item.reactions || {};
+  return (
+    <div className={"reaction-bar" + (compact ? " compact" : "")}>
+      {window.REACTIONS.map(({ emoji, label }) => {
+        const count = reactions[emoji] || 0;
+        return (
+          <button key={emoji} className={"reaction-btn" + (count > 0 ? " has-count" : "")}
+            title={label}
+            onClick={(e) => { e.stopPropagation(); onReact(item, emoji); }}>
+            <span className="reaction-emoji">{emoji}</span>
+            {count > 0 && <span className="reaction-count">{count}</span>}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function TimelineItem({ item, onOpen, active, onReact }) {
   return (
     <div className="tl-row">
       <div className="tl-rail">
         <span className="tl-dot" style={{ background: STATUS_META[item.status].color }} />
       </div>
-      <button className={"tl-card" + (active ? " active" : "")} onClick={() => onOpen(item)}>
-        <div className="tl-top">
-          <ReportTags report={item.report} />
-          <StatusPill status={item.status} />
+      <div className={"tl-card" + (active ? " active" : "")}>
+        <button className="tl-card-body" onClick={() => onOpen(item)}>
+          <div className="tl-top">
+            <ReportTags report={item.report} />
+            <StatusPill status={item.status} />
+          </div>
+          <h3 className="tl-title">{item.title}</h3>
+          <p className="tl-what">{item.what}</p>
+          <div className="tl-meta">
+            <span className="tl-req">
+              <Avatar name={item.requester.name} initials={item.requester.initials} size={24} />
+              <span className="tl-req-name">{item.requester.name}</span>
+            </span>
+            <span className="tl-date" title={fmtDate(item.date)}>
+              {fmtDate(item.date)} · {relTime(item.date)}
+            </span>
+            <span className="tl-open">Details <Icon name="chevron" size={14} /></span>
+          </div>
+        </button>
+        <div className="tl-reactions">
+          <ReactionBar item={item} onReact={onReact} compact />
+          {(item.comments || []).length > 0 && (
+            <button className="comment-count-btn" onClick={() => onOpen(item)}>
+              💬 {item.comments.length}
+            </button>
+          )}
         </div>
-        <h3 className="tl-title">{item.title}</h3>
-        <p className="tl-what">{item.what}</p>
-        <div className="tl-meta">
-          <span className="tl-req">
-            <Avatar name={item.requester.name} initials={item.requester.initials} size={24} />
-            <span className="tl-req-name">{item.requester.name}</span>
-          </span>
-          <span className="tl-date" title={fmtDate(item.date)}>
-            {fmtDate(item.date)} · {relTime(item.date)}
-          </span>
-          <span className="tl-open">Details <Icon name="chevron" size={14} /></span>
-        </div>
-      </button>
+      </div>
     </div>
   );
 }
 
 /* ---------- detail drawer ---------- */
-function DetailDrawer({ item, onClose, client, onEdit }) {
+function CommentForm({ item, onComment }) {
+  const [name, setName] = useState("");
+  const [text, setText] = useState("");
+  const [touched, setTouched] = useState(false);
+  const valid = name.trim() && text.trim();
+
+  function submit() {
+    setTouched(true);
+    if (!valid) return;
+    onComment(item, {
+      name: name.trim(),
+      text: text.trim(),
+      date: new Date().toISOString().slice(0, 10),
+    });
+    setName(""); setText(""); setTouched(false);
+  }
+
+  return (
+    <div className="comment-form">
+      <div className="comment-form-title">Leave a comment</div>
+      <input className={"inp comment-inp" + (touched && !name.trim() ? " invalid-inp" : "")}
+        placeholder="Your name *" value={name} onChange={(e) => setName(e.target.value)} />
+      <textarea className="inp ta comment-inp" rows={2}
+        placeholder="Your comment…" value={text} onChange={(e) => setText(e.target.value)} />
+      {touched && !valid && <span className="form-err" style={{ fontSize: 12 }}>Name and comment are required.</span>}
+      <button className={"btn primary" + (valid ? "" : " dim")} style={{ alignSelf: "flex-end", padding: "8px 14px", fontSize: 13 }}
+        onClick={submit}>Post</button>
+    </div>
+  );
+}
+
+function DetailDrawer({ item, onClose, client, onEdit, onReact, onComment }) {
   useEffect(() => {
     function esc(e) { if (e.key === "Escape") onClose(); }
     window.addEventListener("keydown", esc);
@@ -197,6 +257,29 @@ function DetailDrawer({ item, onClose, client, onEdit }) {
                 <span className="dp-label">Who benefits</span>
                 <ImpactChips items={item.impact} />
               </div>
+
+              <div className="drawer-reactions">
+                <span className="dp-label">Reactions</span>
+                <ReactionBar item={item} onReact={onReact} />
+              </div>
+
+              <div className="drawer-comments">
+                <span className="dp-label">Comments {(item.comments || []).length > 0 && `(${item.comments.length})`}</span>
+                {(item.comments || []).length === 0 && (
+                  <p className="no-comments">No comments yet — be the first!</p>
+                )}
+                {(item.comments || []).map((c, i) => (
+                  <div key={i} className="comment">
+                    <div className="comment-head">
+                      <Avatar name={c.name} initials={c.name.split(" ").map(w => w[0]).slice(0,2).join("").toUpperCase()} size={28} />
+                      <span className="comment-name">{c.name}</span>
+                      <span className="comment-date">{fmtDate(c.date)}</span>
+                    </div>
+                    <p className="comment-text">{c.text}</p>
+                  </div>
+                ))}
+                <CommentForm item={item} onComment={onComment} />
+              </div>
             </div>
           </>
         )}
@@ -217,5 +300,5 @@ function Section({ label, children, accent }) {
 Object.assign(window, {
   fmtDate, monthKey, relTime, Icon, StatusPill, ReportTag, Avatar,
   ImpactChips, TimelineItem, DetailDrawer, Section, STATUS_META, ReportTags,
-  useState, useEffect, useRef,
+  ReactionBar, CommentForm, useState, useEffect, useRef,
 });

@@ -64,6 +64,21 @@ function App() {
     setSelected(it);
   }
 
+  function handleReact(item, emoji) {
+    const reactions = { ...( item.reactions || {} ) };
+    reactions[emoji] = (reactions[emoji] || 0) + 1;
+    const updated = { ...item, reactions };
+    updateInStore(updated);
+    if (selected && selected.id === item.id) setSelected(updated);
+  }
+
+  function handleComment(item, comment) {
+    const comments = [...(item.comments || []), comment];
+    const updated = { ...item, comments };
+    updateInStore(updated);
+    if (selected && selected.id === item.id) setSelected(updated);
+  }
+
   const groups = useMemo(() => {
     const out = [];
     let cur = null;
@@ -204,7 +219,7 @@ function App() {
               <p>No improvements match those filters.</p>
             </div>
           ) : layout === "table" ? (
-            <TableView items={filtered} onOpen={setSelected} selected={selected} />
+            <TableView items={filtered} onOpen={setSelected} selected={selected} onReact={handleReact} />
           ) : (
             <div className="timeline">
               {groups.map((g) => (
@@ -212,7 +227,8 @@ function App() {
                   <div className="tl-month"><span>{g.key}</span></div>
                   {g.items.map((i) => (
                     <TimelineItem key={i.id} item={i} onOpen={setSelected}
-                      active={selected && selected.id === i.id} />
+                      active={selected && selected.id === i.id}
+                      onReact={handleReact} />
                   ))}
                 </div>
               ))}
@@ -222,7 +238,8 @@ function App() {
       </main>
 
       <DetailDrawer item={selected} onClose={() => setSelected(null)} client={client}
-        onEdit={!client ? (it) => { setEditItem(it); setSelected(null); } : null} />
+        onEdit={!client ? (it) => { setEditItem(it); setSelected(null); } : null}
+        onReact={handleReact} onComment={handleComment} />
       <AddModal open={addOpen} onClose={() => setAddOpen(false)} onAdd={addItem} />
       <AddModal open={!!editItem} editItem={editItem} onClose={() => setEditItem(null)} onAdd={saveEdit} />
 
