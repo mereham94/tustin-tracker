@@ -353,28 +353,31 @@ function DetailDrawer({ item, onClose, client, onEdit, onDelete, onReact, onComm
                 <ImpactChips items={item.impact} />
               </div>
 
-              <div className="drawer-reactions">
-                <span className="dp-label">Reactions</span>
-                <ReactionBar item={item} onReact={onReact} />
-              </div>
-
-              <div className="drawer-comments">
-                <span className="dp-label">Comments {(item.comments || []).length > 0 && `(${item.comments.length})`}</span>
-                {(item.comments || []).length === 0 && (
-                  <p className="no-comments">No comments yet — be the first!</p>
-                )}
-                {(item.comments || []).map((c, i) => (
-                  <div key={i} className="comment">
-                    <div className="comment-head">
-                      <Avatar name={c.name} initials={c.name.split(" ").map(w => w[0]).slice(0,2).join("").toUpperCase()} size={28} />
-                      <span className="comment-name">{c.name}</span>
-                      <span className="comment-date">{fmtDate(c.date)}</span>
-                    </div>
-                    <p className="comment-text">{c.text}</p>
+              {client && (
+                <>
+                  <div className="drawer-reactions">
+                    <span className="dp-label">Reactions</span>
+                    <ReactionBar item={item} onReact={onReact} />
                   </div>
-                ))}
-                <CommentForm item={item} onComment={onComment} />
-              </div>
+                  <div className="drawer-comments">
+                    <span className="dp-label">Comments {(item.comments || []).length > 0 && `(${item.comments.length})`}</span>
+                    {(item.comments || []).length === 0 && (
+                      <p className="no-comments">No comments yet — be the first!</p>
+                    )}
+                    {(item.comments || []).map((c, i) => (
+                      <div key={i} className="comment">
+                        <div className="comment-head">
+                          <Avatar name={c.name} initials={c.name.split(" ").map(w => w[0]).slice(0,2).join("").toUpperCase()} size={28} />
+                          <span className="comment-name">{c.name}</span>
+                          <span className="comment-date">{fmtDate(c.date)}</span>
+                        </div>
+                        <p className="comment-text">{c.text}</p>
+                      </div>
+                    ))}
+                    <CommentForm item={item} onComment={onComment} />
+                  </div>
+                </>
+              )}
             </div>
           </>
         )}
