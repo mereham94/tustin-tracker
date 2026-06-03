@@ -236,7 +236,7 @@ function App() {
                   {g.items.map((i) => (
                     <TimelineItem key={i.id} item={i} onOpen={setSelected}
                       active={selected && selected.id === i.id}
-                      onReact={handleReact} />
+                      onReact={handleReact} onComment={handleComment} />
                   ))}
                 </div>
               ))}

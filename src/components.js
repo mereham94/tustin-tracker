@@ -134,7 +134,15 @@ function ReactionBar({ item, onReact, compact }) {
   );
 }
 
-function TimelineItem({ item, onOpen, active, onReact }) {
+function TimelineItem({ item, onOpen, active, onReact, onComment }) {
+  const [commentOpen, setCommentOpen] = useState(false);
+  const comments = item.comments || [];
+
+  function handleComment(it, comment) {
+    onComment(it, comment);
+    setCommentOpen(false);
+  }
+
   return (
     <div className="tl-row">
       <div className="tl-rail">
@@ -159,14 +167,33 @@ function TimelineItem({ item, onOpen, active, onReact }) {
             <span className="tl-open">Details <Icon name="chevron" size={14} /></span>
           </div>
         </button>
+
         <div className="tl-reactions">
           <ReactionBar item={item} onReact={onReact} compact />
-          {(item.comments || []).length > 0 && (
-            <button className="comment-count-btn" onClick={() => onOpen(item)}>
-              💬 {item.comments.length}
-            </button>
-          )}
+          <button className="comment-count-btn" onClick={(e) => { e.stopPropagation(); setCommentOpen(v => !v); }}>
+            💬 {comments.length > 0 ? comments.length : "Comment"}
+          </button>
         </div>
+
+        {commentOpen && (
+          <div className="tl-comment-area" onClick={(e) => e.stopPropagation()}>
+            {comments.length > 0 && (
+              <div className="tl-comment-list">
+                {comments.map((c, i) => (
+                  <div key={i} className="tl-comment">
+                    <Avatar name={c.name} initials={c.name.split(" ").map(w => w[0]).slice(0,2).join("").toUpperCase()} size={24} />
+                    <div className="tl-comment-body">
+                      <span className="tl-comment-name">{c.name}</span>
+                      <span className="tl-comment-date">{fmtDate(c.date)}</span>
+                      <p className="tl-comment-text">{c.text}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            <CommentForm item={item} onComment={handleComment} />
+          </div>
+        )}
       </div>
     </div>
   );

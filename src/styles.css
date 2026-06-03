@@ -165,6 +165,13 @@ button{font-family:inherit;cursor:pointer}
 .tl-reactions{padding:10px 18px 12px;border-top:1px solid var(--line-soft);display:flex;align-items:center;gap:10px;background:#fafbfd}
 .comment-count-btn{border:none;background:none;font-size:13px;color:var(--muted);cursor:pointer;font-family:inherit;font-weight:600;margin-left:auto}
 .comment-count-btn:hover{color:var(--accent)}
+.tl-comment-area{border-top:1px solid var(--line-soft);padding:14px 18px;background:#fafbfd}
+.tl-comment-list{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.tl-comment{display:flex;gap:10px;align-items:flex-start}
+.tl-comment-body{flex:1}
+.tl-comment-name{font-size:13px;font-weight:600;margin-right:8px}
+.tl-comment-date{font-size:11.5px;color:var(--faint)}
+.tl-comment-text{margin:4px 0 0;font-size:13px;color:var(--ink);line-height:1.5}
 .tl-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
 .tl-title{font-size:16.5px;font-weight:600;margin:0 0 5px;letter-spacing:-.005em;line-height:1.3}
 .tl-what{margin:0;color:var(--muted);font-size:14px;line-height:1.5;text-wrap:pretty}
